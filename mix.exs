@@ -18,7 +18,7 @@ defmodule IonosphereVisualizer.Mixfile do
   def application do
     [mod: {IonosphereVisualizer, []},
      applications: [:phoenix, :phoenix_html, :cowboy, :logger,
-                    :phoenix_ecto, :postgrex]]
+                    :phoenix_ecto, :postgrex, :httpoison]]
   end
 
   # Specifies which paths to compile per environment
@@ -34,6 +34,10 @@ defmodule IonosphereVisualizer.Mixfile do
      {:postgrex, ">= 0.0.0"},
      {:phoenix_html, "~> 2.1"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
-     {:cowboy, "~> 1.0"}]
+     {:cowboy, "~> 1.0"},
+     {:httpoison, "~> 0.7.2"},
+     {:csv, "~> 1.1.0"},
+     {:sweet_xml, "~> 0.4.0"},
+     {:floki, "~> 0.5.0"}]
   end
 end

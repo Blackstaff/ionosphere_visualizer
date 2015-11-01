@@ -36,8 +36,8 @@ defmodule IonosphereVisualizer.Mixfile do
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:cowboy, "~> 1.0"},
      {:httpoison, "~> 0.7.2"},
-     {:csv, "~> 1.1.0"},
-     {:sweet_xml, "~> 0.4.0"},
+     {:csv, "~> 1.2.0"},
+     {:sweet_xml, "~> 0.5.0"},
      {:floki, "~> 0.5.0"}]
   end
 end

@@ -35,6 +35,7 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :ionosphere_visualizer, IonosphereVisualizer.Repo,
   adapter: Ecto.Adapters.Postgres,
+  extensions: [{Geo.PostGIS.Extension, library: Geo}],
   username: "postgres",
   password: "postgres",
   database: "ionosphere_visualizer_dev",

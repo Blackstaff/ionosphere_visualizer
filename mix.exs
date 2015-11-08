@@ -39,6 +39,7 @@ defmodule IonosphereVisualizer.Mixfile do
      {:csv, "~> 1.2.0"},
      {:sweet_xml, "~> 0.5.0"},
      {:floki, "~> 0.5.0"},
-     {:geo, "~> 0.17"}]
+     {:geo, "~> 0.17"},
+     {:valid_field, "~> 0.2.0", only: :test}]
   end
 end

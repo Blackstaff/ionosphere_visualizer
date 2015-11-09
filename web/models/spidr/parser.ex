@@ -19,7 +19,7 @@ defmodule IonosphereVisualizer.SPIDR.Parser do
   def parse_data(raw_data, :metadata) do
     raw_data
     |> xpath(~x"//metadata",
-      full_name: ~x"//title/text()"s,
+      name: ~x"//title/text()"s,
       begin_date: ~x"//begdate/text()"s, end_date: ~x"//enddate/text()"s,
       location: [
         ~x"//bounding",

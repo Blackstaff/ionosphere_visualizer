@@ -23,15 +23,15 @@ defmodule IonosphereVisualizer.StationTest do
     |> assert_invalid_field(:location, [nil])
   end
 
-  test "station changeset name validations" do
+  test "station changeset code validations" do
     with_changeset(%Station{})
-    |> assert_valid_field(:name, ["BC840"])
-    |> assert_invalid_field(:name, [nil])
+    |> assert_valid_field(:code, ["BC840"])
+    |> assert_invalid_field(:code, [nil])
   end
 
-  test "station changeset full_name validations" do
+  test "station changeset name validations" do
     with_changeset(%Station{})
-    |> assert_valid_field(:full_name, ["Boulder (BC840)"])
-    |> assert_invalid_field(:full_name, [nil])
+    |> assert_valid_field(:name, ["Boulder (BC840)"])
+    |> assert_invalid_field(:name, [nil])
   end
 end

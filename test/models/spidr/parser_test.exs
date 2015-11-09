@@ -14,7 +14,7 @@ defmodule IonosphereVisualizer.SPIDR.ParserTest do
 
   test "Parser.parse_data parses valid SPIDR xml metadata" do
     test_data = File.read!("./test/models/spidr/data/iono.BC840_metadata.xml")
-    expected_result = %{ full_name: "Boulder (BC840)", begin_date: "1958-12-31", end_date: nil,
+    expected_result = %{ name: "Boulder (BC840)", begin_date: "1958-12-31", end_date: nil,
       location: %Geo.Point{ coordinates: { -105.2697, 39.9918 }, srid: nil } }
     result = test_data
     |> Parser.parse_data(:metadata)

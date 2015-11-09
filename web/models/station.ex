@@ -2,8 +2,8 @@ defmodule IonosphereVisualizer.Station do
   use IonosphereVisualizer.Web, :model
 
   schema "stations" do
+    field :code, :string
     field :name, :string
-    field :full_name, :string
     field :date_from, Ecto.Date
     field :date_to, Ecto.Date
     field :location, Geo.Point
@@ -11,7 +11,7 @@ defmodule IonosphereVisualizer.Station do
     timestamps
   end
 
-  @required_fields ~w(name full_name date_from location)
+  @required_fields ~w(code name date_from location)
   @optional_fields ~w(date_to)
 
   @doc """

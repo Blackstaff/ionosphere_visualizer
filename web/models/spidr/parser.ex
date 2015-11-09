@@ -20,15 +20,15 @@ defmodule IonosphereVisualizer.SPIDR.Parser do
     raw_data
     |> xpath(~x"//metadata",
       code: ~x"//title/text()"s, name: ~x"//title/text()"s,
-      begin_date: ~x"//begdate/text()"s, end_date: ~x"//enddate/text()"s,
+      date_from: ~x"//begdate/text()"s, date_to: ~x"//enddate/text()"s,
       location: [
         ~x"//bounding",
         longitude: ~x"./westbc/text()"s,
         latitude: ~x"./northbc/text()"s ])
     |> Map.update!(:location, &(%Geo.Point{ coordinates: { String.to_float(&1.longitude),
       String.to_float(&1.latitude) }, srid: nil }))
-    |> Map.update!(:begin_date, &(&1 <> "-12-31"))
-    |> Map.update!(:end_date, &(case &1 do
+    |> Map.update!(:date_from, &(&1 <> "-12-31"))
+    |> Map.update!(:date_to, &(case &1 do
         "Present" -> nil
         _ -> &1 <> "-01-01"
       end))

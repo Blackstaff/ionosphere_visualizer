@@ -21,12 +21,17 @@ defmodule IonosphereVisualizer.SPIDR.Parser do
     |> xpath(~x"//metadata",
       full_name: ~x"//title/text()"s,
       begin_date: ~x"//begdate/text()"s, end_date: ~x"//enddate/text()"s,
-      progress: ~x"//progress/text()"s, coordinates: [
+      location: [
         ~x"//bounding",
         longitude: ~x"./westbc/text()"s,
         latitude: ~x"./northbc/text()"s ])
-    |> Map.update!(:coordinates, &(%{longitude: String.to_float(&1.longitude),
-      latitude: String.to_float(&1.latitude)}))
+    |> Map.update!(:location, &(%Geo.Point{ coordinates: { String.to_float(&1.longitude),
+      String.to_float(&1.latitude) }, srid: nil }))
+    |> Map.update!(:begin_date, &(&1 <> "-12-31"))
+    |> Map.update!(:end_date, &(case &1 do
+        "Present" -> nil
+        _ -> &1 <> "-01-01"
+      end))
   end
 
   def parse_data(raw_data, :station_list) do

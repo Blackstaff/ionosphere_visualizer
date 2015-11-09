@@ -6,7 +6,7 @@ defmodule IonosphereVisualizer.SPIDR.Client do
   @_SPIDR "http://spidr.ngdc.noaa.gov"
   @_SPIDR_DATA_PREFIX "/spidr/servlet/GetData?format=csv"
   @_SPIDR_METADATA_PREFIX "/spidr/servlet/GetMetadata?"
-  @_SPIDR_STATION_LIST_PREFIX "/spidr/servlet/GetData?describe"
+  @_SPIDR_STATION_LIST_PREFIX "/spidr/servlet/GetMetadata?describe&"
 
   def get_data(param, date_from, date_to) do
     get!("#{@_SPIDR_DATA_PREFIX}&param=#{param}&dateFrom=#{date_from}&dateTo=#{date_to}")

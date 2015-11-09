@@ -31,7 +31,7 @@ defmodule IonosphereVisualizer.StationTest do
 
   test "station changeset name validations" do
     with_changeset(%Station{})
-    |> assert_valid_field(:name, ["Boulder (BC840)"])
+    |> assert_valid_field(:name, ["Boulder"])
     |> assert_invalid_field(:name, [nil])
   end
 end

@@ -8,6 +8,7 @@ defmodule IonosphereVisualizer.Station do
     field :date_to, Ecto.Date
     field :location, Geo.Point
 
+    has_many :measurements, IonosphereVisualizer.Measurement
     timestamps
   end
 

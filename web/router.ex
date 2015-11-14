@@ -19,6 +19,12 @@ defmodule IonosphereVisualizer.Router do
     get "/", PageController, :index
   end
 
+  scope "/api", IonosphereVisualizer do
+    pipe_through :api
+
+    get "/measurements", MeasurementController, :index
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", IonosphereVisualizer do
   #   pipe_through :api

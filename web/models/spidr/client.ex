@@ -3,28 +3,28 @@ defmodule IonosphereVisualizer.SPIDR.Client do
 
   alias IonosphereVisualizer.SPIDR.Parser
 
-  @_SPIDR "http://spidr.ngdc.noaa.gov"
-  @_SPIDR_DATA_PREFIX "/spidr/servlet/GetData?format=csv"
-  @_SPIDR_METADATA_PREFIX "/spidr/servlet/GetMetadata?"
-  @_SPIDR_STATION_LIST_PREFIX "/spidr/servlet/GetMetadata?describe&"
+  @spidr "http://spidr.ngdc.noaa.gov"
+  @spidr_data_prefix "/spidr/servlet/GetData?format=csv"
+  @spidr_metadata_prefix "/spidr/servlet/GetMetadata?"
+  @spidr_station_list_prefix "/spidr/servlet/GetMetadata?describe&"
 
   def get_data(param, date_from, date_to) do
-    get!("#{@_SPIDR_DATA_PREFIX}&param=#{param}&dateFrom=#{date_from}&dateTo=#{date_to}")
+    get!("#{@spidr_data_prefix}&param=#{param}&dateFrom=#{date_from}&dateTo=#{date_to}")
     |> process_response(:measurements)
   end
 
   def get_metadata(param) do
-    get!(@_SPIDR_METADATA_PREFIX <> "param=#{param}")
+    get!(@spidr_metadata_prefix <> "param=#{param}")
     |> process_response(:metadata)
   end
 
   def get_station_list(param) do
-    get!(@_SPIDR_STATION_LIST_PREFIX <> "param=#{param}")
+    get!(@spidr_station_list_prefix <> "param=#{param}")
     |> process_response(:station_list)
   end
 
   defp process_url(url) do
-    @_SPIDR <> url
+    @spidr <> url
   end
 
   defp process_response(%{ body: body, status_code: 200 }, format) do

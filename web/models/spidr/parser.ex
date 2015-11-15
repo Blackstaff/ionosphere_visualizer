@@ -1,7 +1,7 @@
 defmodule IonosphereVisualizer.SPIDR.Parser do
   import SweetXml
 
-  @_DATA_HEADERS_ [:time, :value, :qualifier, :description]
+  @data_headers [:time, :value, :qualifier, :description]
 
   def parse_data(raw_data, :measurements) do
     raw_data
@@ -11,7 +11,7 @@ defmodule IonosphereVisualizer.SPIDR.Parser do
     |> Stream.reject(&(String.first(&1) == "#" || &1 == "\n"))
     |> Enum.to_list
     |> Stream.map(&(String.replace(&1, "/", "")))
-    |> CSV.decode(headers: @_DATA_HEADERS_, num_pipes: 1)
+    |> CSV.decode(headers: @data_headers, num_pipes: 1)
     |> Enum.map(&(Map.update!(&1, :value, fn(value) -> String.to_float(value) end)))
     #consider Stream
   end

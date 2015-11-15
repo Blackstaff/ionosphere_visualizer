@@ -1,6 +1,8 @@
 defmodule IonosphereVisualizer.Measurement do
   use IonosphereVisualizer.Web, :model
 
+  alias IonosphereVisualizer.ParameterType
+
   schema "measurements" do
     field :value, :float
     field :measured_at, Ecto.DateTime
@@ -13,7 +15,6 @@ defmodule IonosphereVisualizer.Measurement do
 
   @required_fields ~w(value measured_at parameter_type)
   @optional_fields ~w(last_accessed)
-  @parameter_types ~w(foF2 foE hpF hmF2)
 
   @doc """
   Creates a changeset based on the `model` and `params`.
@@ -25,6 +26,6 @@ defmodule IonosphereVisualizer.Measurement do
     model
     |> cast(params, @required_fields, @optional_fields)
     |> Ecto.Model.Timestamps.put_timestamp(:last_accessed, Ecto.DateTime, false)
-    |> validate_inclusion(:parameter_type, @parameter_types)
+    |> validate_inclusion(:parameter_type, ParameterType.get_types)
   end
 end

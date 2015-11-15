@@ -1,18 +1,25 @@
 defmodule IonosphereVisualizer.MeasurementTest do
   use IonosphereVisualizer.ModelCase
 
+  import ValidField
+
   alias IonosphereVisualizer.Measurement
 
-  @valid_attrs %{last_accessed: "2010-04-17 14:00:00", measured_at: "2010-04-17 14:00:00", parameter_type: "some content", value: "120.5"}
-  @invalid_attrs %{}
-
-  test "changeset with valid attributes" do
-    changeset = Measurement.changeset(%Measurement{}, @valid_attrs)
-    assert changeset.valid?
+  test "measurement changeset measured_at validations" do
+    with_changeset(%Measurement{})
+    |> assert_valid_field(:measured_at, ["1958-01-01 00:00:00"])
+    |> assert_invalid_field(:measured_at, [nil, "1958", ""])
   end
 
-  test "changeset with invalid attributes" do
-    changeset = Measurement.changeset(%Measurement{}, @invalid_attrs)
-    refute changeset.valid?
+  test "measurement changeset parameter_type validations" do
+    with_changeset(%Measurement{})
+    |> assert_valid_field(:parameter_type, ["foF2"])
+    |> assert_invalid_field(:parameter_type, [nil, "1958", "type", ""])
+  end
+
+  test "measurement changeset value validations" do
+    with_changeset(%Measurement{})
+    |> assert_valid_field(:value, [3.45])
+    |> assert_invalid_field(:value, [nil, "string", ""])
   end
 end

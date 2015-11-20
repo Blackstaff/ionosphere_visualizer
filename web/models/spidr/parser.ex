@@ -8,12 +8,10 @@ defmodule IonosphereVisualizer.SPIDR.Parser do
     |> StringIO.open
     |> elem(1)
     |> IO.stream(:line)
-    |> Stream.reject(&(String.first(&1) == "#" || &1 == "\n"))
+    |> Stream.reject(&(&1 == "\n"))
     |> Enum.to_list
-    |> Stream.map(&(String.replace(&1, "/", "")))
-    |> CSV.decode(headers: @data_headers, num_pipes: 1)
-    |> Enum.map(&(Map.update!(&1, :value, fn(value) -> String.to_float(value) end)))
-    #consider Stream
+    |> split_csv_data
+    |> Stream.map(fn(csv) -> parse_single_csv(csv) end)
   end
 
   def parse_data(raw_data, :metadata) do
@@ -41,6 +39,31 @@ defmodule IonosphereVisualizer.SPIDR.Parser do
     |> Floki.find("table a")
     |> Stream.map(&Floki.FlatText.get/1)
     |> Enum.take_every(2)
-    #consider Stream
+    #OPTIMIZE consider Stream
+  end
+
+  defp split_csv_data(csv_data) do
+    {tl, hd} = csv_data
+    |> List.foldl({[], []}, fn(line, {acc, tmp}) ->
+      case String.first(line) do
+        "#" when length(tmp) == 0 ->
+          {acc, tmp}
+        "#" when length(tmp) > 0 ->
+          {[tmp | acc], []}
+        _ -> 
+          {acc, [line | tmp]}
+      end
+    end)
+
+    [hd | tl]
+    |> Enum.reverse
+  end
+
+  defp parse_single_csv(csv) do
+    csv
+    |> Stream.map(&(String.replace(&1, "/", "")))
+    |> CSV.decode(headers: @data_headers, num_pipes: 1)
+    |> Enum.map(&(Map.update!(&1, :value, fn(value) -> String.to_float(value) end)))
+    #OPTIMIZE consider Stream
   end
 end

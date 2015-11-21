@@ -4,10 +4,12 @@ defmodule IonosphereVisualizer.SPIDR.ParserTest do
   import List, only: [last: 1]
 
   alias IonosphereVisualizer.SPIDR.Parser
+  alias Ecto.DateTime
 
   test "Parser.parse_data parses valid SPIDR csv data" do
     test_data = File.read!("./test/models/spidr/data/foF2.BC840_20071225_20080101.csv")
-    expected_result = [%{time: "2008-01-01 23:45", value: 3.75, qualifier: "", description: ""}, %{time: "2007-12-25 00:00", value: 3.8, qualifier: "", description: ""}]
+    expected_result = [%{measured_at: elem(DateTime.cast("2008-01-01 23:45:00"), 1), value: 3.75, qualifier: "", description: ""},
+      %{measured_at: elem(DateTime.cast("2007-12-25 00:00:00"), 1), value: 3.8, qualifier: "", description: ""}]
     parsed_data = test_data
     |> Parser.parse_data(:measurements)
     |> Enum.to_list
@@ -18,8 +20,10 @@ defmodule IonosphereVisualizer.SPIDR.ParserTest do
 
   test "Parser.parse_data parses valid SPIDR csv data with multiple params/stations" do
     test_data = File.read!("./test/models/spidr/data/foF2.BC840_foF2.WP937_20071225_20080101.csv")
-    expected_result = [%{time: "2008-01-01 23:45", value: 3.75, qualifier: "", description: ""}, %{time: "2007-12-25 00:00", value: 3.8, qualifier: "", description: ""},
-      %{time: "2008-01-01 23:45", value: 2.7, qualifier: "", description: ""}, %{time: "2007-12-25 00:00", value: 3.1, qualifier: "", description: ""}]
+    expected_result = [%{measured_at: elem(DateTime.cast("2008-01-01 23:45:00"), 1), value: 3.75, qualifier: "", description: ""},
+      %{measured_at: elem(DateTime.cast("2007-12-25 00:00:00"), 1), value: 3.8, qualifier: "", description: ""},
+      %{measured_at: elem(DateTime.cast("2008-01-01 23:45:00"), 1), value: 2.7, qualifier: "", description: ""},
+      %{measured_at: elem(DateTime.cast("2007-12-25 00:00:00"), 1), value: 3.1, qualifier: "", description: ""}]
     [head | tail] = test_data
     |> Parser.parse_data(:measurements)
     |> Enum.to_list

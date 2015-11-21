@@ -1,7 +1,9 @@
 defmodule IonosphereVisualizer.SPIDR.Parser do
+  alias Ecto.DateTime
+
   import SweetXml
 
-  @data_headers [:time, :value, :qualifier, :description]
+  @data_headers [:measured_at, :value, :qualifier, :description]
 
   def parse_data(raw_data, :measurements) do
     raw_data
@@ -63,7 +65,13 @@ defmodule IonosphereVisualizer.SPIDR.Parser do
     csv
     |> Stream.map(&(String.replace(&1, "/", "")))
     |> CSV.decode(headers: @data_headers, num_pipes: 1)
-    |> Enum.map(&(Map.update!(&1, :value, fn(value) -> String.to_float(value) end)))
+    |> Stream.map(&(Map.update!(&1, :value, fn(value) -> String.to_float(value) end)))
+    |> Enum.map(&(Map.update!(&1, :measured_at, fn(mt) -> cast_to_ecto_datetime(mt) end)))
     #OPTIMIZE consider Stream
+  end
+
+  defp cast_to_ecto_datetime(datetime) do
+    {:ok, dt} = DateTime.cast(datetime <> ":00")
+    dt
   end
 end

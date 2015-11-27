@@ -25,8 +25,10 @@ defmodule IonosphereVisualizer.SPIDR.Parser do
         ~x"//bounding",
         longitude: ~x"./westbc/text()"s,
         latitude: ~x"./northbc/text()"s ])
+    #TODO move to Station model
     |> Map.update!(:location, &(%Geo.Point{ coordinates: { String.to_float(&1.longitude),
       String.to_float(&1.latitude) }, srid: nil }))
+    ###############################################3
     |> Map.update!(:date_from, &(&1 <> "-12-31"))
     |> Map.update!(:date_to, &(case &1 do
         "Present" -> nil
@@ -45,15 +47,17 @@ defmodule IonosphereVisualizer.SPIDR.Parser do
   end
 
   defp split_csv_data(csv_data) do
-    {tl, hd} = csv_data
-    |> List.foldl({[], []}, fn(line, {acc, tmp}) ->
-      case String.first(line) do
-        "#" when length(tmp) == 0 ->
-          {acc, tmp}
-        "#" when length(tmp) > 0 ->
-          {[tmp | acc], []}
-        _ -> 
-          {acc, [line | tmp]}
+    {tl, hd, _} = csv_data
+    |> List.foldl({[], [], ""}, fn(line, {acc, tmp, prev_line}) ->
+      case {String.first(line), line, prev_line} do
+        {_, "#>\n", "#yyyy-MM-dd HH:mm,value,qualifier,description\n"} ->
+          {[[] | acc], [], line}
+        {"#", _, _} when length(tmp) == 0 ->
+          {acc, tmp, line}
+        {"#", _, _} when length(tmp) > 0 ->
+          {[tmp | acc], [], line}
+        {_, _, _} ->
+          {acc, [line | tmp], line}
       end
     end)
 

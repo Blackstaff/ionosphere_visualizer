@@ -2,6 +2,7 @@ defmodule IonosphereVisualizer.SPIDR.Client do
   use HTTPoison.Base
 
   alias IonosphereVisualizer.SPIDR.Parser
+  alias Ecto.DateTime.Utils, as: Utils
 
   @spidr "http://spidr.ngdc.noaa.gov"
   @spidr_data_prefix "/spidr/servlet/GetData?format=csv"
@@ -10,6 +11,8 @@ defmodule IonosphereVisualizer.SPIDR.Client do
 
   def get_data(params, date_from, date_to) do
     param_string = to_param_string(params)
+    date_from = convert_date(date_from)
+    date_to = convert_date(date_to)
     get!("#{@spidr_data_prefix}&param=#{param_string}&dateFrom=#{date_from}&dateTo=#{date_to}")
     |> process_response(:measurements)
     |> Stream.zip(params)
@@ -22,6 +25,11 @@ defmodule IonosphereVisualizer.SPIDR.Client do
     (for param <- params, do: "#{param.param_type}.#{param.station}")
     |> Enum.reduce(fn(param, acc) -> acc <> ";#{param}" end)
   end
+
+  defp convert_date(%Ecto.Date{year: year, month: month, day: day}),
+    do: Utils.zero_pad(year, 4) <> Utils.zero_pad(month, 2)
+      <> Utils.zero_pad(day, 2)
+  defp convert_date(date), do: date
 
   def get_metadata(param) do
     get!(@spidr_metadata_prefix <> "param=#{param}")

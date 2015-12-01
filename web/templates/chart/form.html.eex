@@ -1,0 +1,36 @@
+<%= form_for @changeset, chart_path(@conn, :create), fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below:</p>
+      <ul>
+        <%= for {attr, message} <- f.errors do %>
+          <li><%= humanize(attr) %> <%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <label>
+      Station: <%= multiple_select f, :stations, to_code_name_tuples(@stations) %>
+    </label>
+  </div>
+  <div class="form-group">
+    <label>
+      Parameter type: <%= select f, :parameter_type, @types %>
+    </label>
+  </div>
+  <div class="form-group">
+    <label>
+      From: <%= date_select f, :date_from %>
+    </label>
+  </div>
+  <div class="form-group">
+    <label>
+      To: <%= date_select f, :date_to %>
+    </label>
+  </div>
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>

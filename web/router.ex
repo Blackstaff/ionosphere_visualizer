@@ -17,12 +17,13 @@ defmodule IonosphereVisualizer.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+    get "/charts", ChartController, :index
   end
 
   scope "/api", IonosphereVisualizer do
     pipe_through :api
 
-    get "/measurements", MeasurementController, :index
+    post "/charts", ChartController, :create
   end
 
   # Other scopes may use custom stacks.

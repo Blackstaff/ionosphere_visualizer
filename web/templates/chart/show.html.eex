@@ -1,0 +1,8 @@
+<h2>Show chart</h2>
+
+<ul>
+
+</ul>
+
+<%= link "Edit", to: chart_path(@conn, :edit, @chart) %>
+<%= link "Back", to: chart_path(@conn, :index) %>

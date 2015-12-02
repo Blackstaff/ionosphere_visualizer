@@ -69,7 +69,7 @@ defmodule IonosphereVisualizer.ChartController do
     |> Enum.map(&(Date.shift(date_from, days: &1)))
     |> Enum.map(&(Ecto.Date.cast({&1.year, &1.month, &1.day}) |> elem(1)))
 
-    pipe_while fn
+    missing_measurements = pipe_while fn
         [] -> false
         _ -> true
       end,
@@ -106,8 +106,16 @@ defmodule IonosphereVisualizer.ChartController do
           do: Dict.put_new(measurement, :parameter_type, param_type)
         %{elem | measurements: measurements}
       end)
-      |> persist_measurements
-      |> merge_measurements(data)
+
+      missing_measurements
+      |> add_missing_measurements(data)
+  end
+
+  defp add_missing_measurements([], data), do: data
+  defp add_missing_measurements(missing_measurements, data) do
+    missing_measurements
+    |> persist_measurements
+    |> merge_measurements(data)
   end
 
   defp missing_dates(%{station: station, measurements: []}, dates_list),

@@ -177,7 +177,7 @@ defmodule IonosphereVisualizer.ChartController do
     data
     |> Enum.map(fn(elem) ->
       %{station: station, measurements: measurements} = elem
-      %{elem | measurements: measurements ++ missing_data[station]}
+      %{elem | measurements: measurements ++ Map.get(missing_data, station, [])}
     end)
   end
 end

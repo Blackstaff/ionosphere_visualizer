@@ -29,7 +29,7 @@ defmodule IonosphereVisualizer.ChartController do
     |> List.foldl(%{}, fn({s, m}, acc) ->
       Map.update(acc, s, [], &([m | &1]))
     end)
-    #TODO Prettify 
+    #TODO Prettify
     #OPTIMIZE
     |> (fn(measurements) -> (Repo.all from s in Station, where: s.code in ^chart.stations) |> List.foldl(measurements, fn(station, acc) ->
       if is_nil(acc[station]) do
@@ -47,7 +47,9 @@ defmodule IonosphereVisualizer.ChartController do
 
     conn
     |> put_status(:created)
-    |> render("chart.json", %{chart: measurements, param_type: chart.parameter_type})
+    |> render("chart.json", %{chart: measurements,
+      param_type: chart.parameter_type,
+      unit: ParameterType.get_unit(chart.parameter_type)})
 
     #case Repo.insert(changeset) do
      # {:ok, measurement} ->

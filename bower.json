@@ -1,0 +1,30 @@
+{
+  "name": "ionosphere_visualizer",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Mateusz Czarnecki <mateusz.czarnecki92@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/Blackstaff/ionosphere_visualizer",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "highcharts": "highcharts-release#~4.1.9"
+  },
+  "overrides": {
+    "highcharts": {
+      "dependencies": {
+        "jquery": "*"
+      }
+    }
+  }
+}

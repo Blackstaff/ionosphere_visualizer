@@ -11,24 +11,30 @@
   <% end %>
 
   <div class="form-group">
-    <label>
-      Station: <%= multiple_select f, :stations, to_code_name_tuples(@stations) %>
-    </label>
+    <%= label f, :stations, "Stations:" %>
+    <%= multiple_select f, :stations, to_code_name_tuples(@stations), class: "form-control" %>
   </div>
   <div class="form-group">
-    <label>
-      Parameter type: <%= select f, :parameter_type, @types %>
-    </label>
+    <%= label f, :parameter_type, "Parameter type:" %>
+    <%= select f, :parameter_type, @types, class: "form-control" %>
   </div>
   <div class="form-group">
-    <label>
-      From: <%= date_select f, :date_from %>
-    </label>
+    <%= label f, :date_from_str, "From:" %>
+    <div class="input-group date">
+      <input type="text" id="date_from_str" class="form-control" name="chart[date_from_str]">
+      <span class="input-group-addon">
+        <i class="glyphicon glyphicon-th"></i>
+      </span>
+    </div>
   </div>
   <div class="form-group">
-    <label>
-      To: <%= date_select f, :date_to %>
-    </label>
+    <%= label f, :date_to_str, "To:" %>
+    <div class="input-group date">
+      <input type="text" id="date_to_str" class="form-control" name="chart[date_to_str]">
+      <span class="input-group-addon">
+        <i class="glyphicon glyphicon-th"></i>
+      </span>
+    </div>
   </div>
   <div class="form-group">
     <%= submit "Submit", class: "btn btn-primary", id: "chart-form-submit" %>

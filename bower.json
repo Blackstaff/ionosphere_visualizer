@@ -18,7 +18,8 @@
   ],
   "dependencies": {
     "jquery": "~2.1.4",
-    "highcharts": "highcharts-release#~4.1.9"
+    "highcharts": "highcharts-release#~4.1.9",
+    "bootstrap-datepicker": "~1.5.0"
   },
   "overrides": {
     "highcharts": {

@@ -25,6 +25,10 @@ form.link, form.button {
   display: inline;
 }
 
+.form-group {
+  font-weight: 700;
+}
+
 /* Customize container */
 @media (min-width: 768px) {
   .container {

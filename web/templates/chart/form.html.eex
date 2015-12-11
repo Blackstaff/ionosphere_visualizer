@@ -19,18 +19,9 @@
     <%= select f, :parameter_type, @types, class: "form-control" %>
   </div>
   <div class="form-group">
-    <%= label f, :date_from_str, "From:" %>
+    <%= label f, :date_range, "Date range:" %>
     <div class="input-group date">
-      <input type="text" id="date_from_str" class="form-control" name="chart[date_from_str]">
-      <span class="input-group-addon">
-        <i class="glyphicon glyphicon-th"></i>
-      </span>
-    </div>
-  </div>
-  <div class="form-group">
-    <%= label f, :date_to_str, "To:" %>
-    <div class="input-group date">
-      <input type="text" id="date_to_str" class="form-control" name="chart[date_to_str]">
+      <input type="text" id="date_range" class="form-control" name="chart[date_range]">
       <span class="input-group-addon">
         <i class="glyphicon glyphicon-th"></i>
       </span>

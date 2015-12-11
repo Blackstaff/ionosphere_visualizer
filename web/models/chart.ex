@@ -4,15 +4,14 @@ defmodule IonosphereVisualizer.Chart do
   schema "charts" do
     field :parameter_type, :string
     field :stations, {:array, :string}
-    field :date_from_str, :string
-    field :date_to_str, :string
+    field :date_range, :string
     field :date_from, Ecto.Date
     field :date_to, Ecto.Date
     field :time_from, Ecto.DateTime
     field :time_to, Ecto.DateTime
   end
 
-  @required_fields ~w(parameter_type stations date_from_str date_to_str)
+  @required_fields ~w(parameter_type stations date_range)
   @optional_fields ~w()
 
   @doc """
@@ -31,29 +30,32 @@ defmodule IonosphereVisualizer.Chart do
   defp put_dates(changeset) do
     case changeset do
       %Ecto.Changeset{valid?: true} ->
-        date_from = changeset.changes.date_from_str |> parse_date
-        date_to = changeset.changes.date_to_str |> parse_date
+        {date_from, date_to} = changeset.changes.date_range |> parse_date_range
         case {date_from, date_to} do
           {{:ok, x}, {:ok, y}} ->
             changeset
             |> put_change(:date_from, x)
             |> put_change(:date_to, y)
           {{:ok, _}, _} -> changeset
-            |> Ecto.Changeset.add_error(:date_to_str, "invalid")
+            |> Ecto.Changeset.add_error(:date_to, "invalid")
           {_, {:ok, _}} -> changeset
-            |> Ecto.Changeset.add_error(:date_from_str, "invalid")
+            |> Ecto.Changeset.add_error(:date_from, "invalid")
           {_, _} -> changeset
-            |> Ecto.Changeset.add_error(:date_from_str, "invalid")
-            |> Ecto.Changeset.add_error(:date_to_str, "invalid")
+            |> Ecto.Changeset.add_error(:date_from, "invalid")
+            |> Ecto.Changeset.add_error(:date_to, "invalid")
         end
       _ -> changeset
     end
   end
 
-  defp parse_date(date_str) do
-    ~r/^(?<day>\d{2})\/(?<month>\d{2})\/(?<year>\d{4})/
-    |> Regex.named_captures(date_str)
-    |> Ecto.Date.cast
+  defp parse_date_range(date_range) do
+    captures = ~r/^(?<day_fr>\d{2})\/(?<month_fr>\d{2})\/(?<year_fr>\d{4})\s
+      -\s(?<day_to>\d{2})\/(?<month_to>\d{2})\/(?<year_to>\d{4})/mx
+    |> Regex.named_captures(date_range)
+    { %{day: captures["day_fr"], month: captures["month_fr"],
+        year: captures["year_fr"]} |> Ecto.Date.cast,
+      %{day: captures["day_to"], month: captures["month_to"],
+        year: captures["year_to"]} |> Ecto.Date.cast }
   end
 
   defp put_times(changeset) do

@@ -7,7 +7,7 @@ $("#chart-form-submit").click(function(event) {
       var measurements = elem.measurements.map(function(measurement) {
         return [Date.parse(measurement.measured_at), measurement.value];
       })
-      .sort(function(a, b) { return a[0]-b[0] });
+      .sort((a, b) => a[0]-b[0]);
       return {
         name: elem.station.name,
         data: measurements

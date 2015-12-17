@@ -26,8 +26,8 @@ defmodule IonosphereVisualizer.SPIDR.Parser do
         longitude: ~x"./westbc/text()"s,
         latitude: ~x"./northbc/text()"s ])
     #TODO move to Station model
-    |> Map.update!(:location, &(%Geo.Point{ coordinates: { String.to_float(&1.longitude),
-      String.to_float(&1.latitude) }, srid: nil }))
+    |> Map.update!(:location, &(%Geo.Point{ coordinates: { String.to_float(&1.latitude),
+      String.to_float(&1.longitude) }, srid: nil }))
     ###############################################3
     |> Map.update!(:date_from, &(&1 <> "-12-31"))
     |> Map.update!(:date_to, &(case &1 do

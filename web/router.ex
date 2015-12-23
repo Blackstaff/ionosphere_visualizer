@@ -18,12 +18,14 @@ defmodule IonosphereVisualizer.Router do
 
     get "/", PageController, :index
     get "/charts", ChartController, :index
+    get "/maps", MapController, :index
   end
 
   scope "/api", IonosphereVisualizer do
     pipe_through :api
 
     post "/charts", ChartController, :create
+    post "/maps", MapController, :create
   end
 
   # Other scopes may use custom stacks.

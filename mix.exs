@@ -42,6 +42,7 @@ defmodule IonosphereVisualizer.Mixfile do
      {:geo, "~> 0.17"},
      {:valid_field, "~> 0.2.0", only: :test},
      {:timex, "~> 1.0.0-rc2"},
-     {:pipe, "~> 0.0.2"}]
+     {:pipe, "~> 0.0.2"},
+     {:geocalc, "~> 0.4.0"}]
   end
 end

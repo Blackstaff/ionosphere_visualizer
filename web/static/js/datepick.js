@@ -9,7 +9,7 @@ $("#date_range").daterangepicker({
   }
 });
 
-$("#date").daterangepicker({
+$("#datetime").daterangepicker({
   maxDate: moment.utc(),
   drops: "up",
   showDropdowns: true,
@@ -18,6 +18,6 @@ $("#date").daterangepicker({
   timePicker24Hour: true,
   timePickerIncrement: 30,
   locale: {
-    format: "DD/MM/YYYY HH:mm"
+    format: "DD/MM/YYYY HH:mm UTC"
   },
 });

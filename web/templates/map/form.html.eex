@@ -17,7 +17,7 @@
   <div class="form-group">
     <%= label f, :date, "Date:" %>
     <div class="input-group date">
-      <input type="text" id="date" class="form-control" name="map[datetime]">
+      <input type="text" id="datetime" class="form-control" name="map[datetime]">
       <span class="input-group-addon">
         <i class="glyphicon glyphicon-th"></i>
       </span>

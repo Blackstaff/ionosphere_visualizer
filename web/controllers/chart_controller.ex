@@ -48,7 +48,7 @@ defmodule IonosphereVisualizer.ChartController do
     conn
     |> put_status(:created)
     |> render("chart.json", %{chart: measurements,
-      param_type: chart.parameter_type,
+      parameter_type: chart.parameter_type,
       unit: ParameterType.get_unit(chart.parameter_type)})
 
     #case Repo.insert(changeset) do
@@ -64,7 +64,7 @@ defmodule IonosphereVisualizer.ChartController do
     #end
   end
 
-  defp add_missing_measurements(data, date_from, date_to, stations, param_type) do
+  defp add_missing_measurements(data, date_from, date_to, stations, parameter_type) do
     date_from = Date.from(Ecto.Date.to_erl(date_from))
     date_to = Date.from(Ecto.Date.to_erl(date_to))
     dates_list = 0..Date.diff(date_from, date_to, :days)
@@ -98,14 +98,14 @@ defmodule IonosphereVisualizer.ChartController do
         {acc_from, acc_to, [station | stations]}
       end)
       |> (fn({from, to, stations}) -> {from, to, Enum.reverse(stations)} end).()
-      |> get_missing_measurements(param_type, data)
+      |> get_missing_measurements(parameter_type, data)
       |> Enum.reject(fn
         %{measurements: []} -> true
         _ -> false
       end)
       |> Stream.map(fn(elem = %{measurements: measurements}) ->
         measurements = for measurement <- measurements,
-          do: Dict.put_new(measurement, :parameter_type, param_type)
+          do: Dict.put_new(measurement, :parameter_type, parameter_type)
         %{elem | measurements: measurements}
       end)
 
@@ -131,9 +131,9 @@ defmodule IonosphereVisualizer.ChartController do
     {station, missing_dates}
   end
 
-  defp get_missing_measurements({date_from, date_to, stations}, param_type, data) do
+  defp get_missing_measurements({date_from, date_to, stations}, parameter_type, data) do
     (for station <- stations,
-      do: %{param_type: param_type, station: station.code})
+      do: %{parameter_type: parameter_type, station: station.code})
     |> Client.get_data(date_from, date_to)
     |> Enum.map(fn(elem) ->
       data

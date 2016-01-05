@@ -19,7 +19,7 @@ $("#chart-form-submit").click(function(event) {
           zoomType: "x"
         },
         title: {
-          text: `Ionospheric data (${data.param_type})`,
+          text: `Ionospheric data (${data.parameter_type})`,
           x: -20 //center
         },
         subtitle: {
@@ -28,7 +28,7 @@ $("#chart-form-submit").click(function(event) {
         },
         yAxis: {
           title: {
-            text: `${data.param_type} (${data.unit})`
+            text: `${data.parameter_type} (${data.unit})`
           },
           plotLines: [{
             value: 0,

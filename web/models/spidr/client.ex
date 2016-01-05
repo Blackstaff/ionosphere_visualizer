@@ -16,13 +16,13 @@ defmodule IonosphereVisualizer.SPIDR.Client do
     get!("#{@spidr_data_prefix}&param=#{param_string}&dateFrom=#{date_from}&dateTo=#{date_to}")
     |> process_response(:measurements)
     |> Stream.zip(params)
-    |> Enum.map(fn({data, %{param_type: pt, station: s}}) ->
-      %{param_type: pt, station: s, measurements: data}
+    |> Enum.map(fn({data, %{parameter_type: pt, station: s}}) ->
+      %{parameter_type: pt, station: s, measurements: data}
     end)
   end
 
   defp to_param_string(params) do
-    (for param <- params, do: "#{param.param_type}.#{param.station}")
+    (for param <- params, do: "#{param.parameter_type}.#{param.station}")
     |> Enum.reduce(fn(param, acc) -> acc <> ";#{param}" end)
   end
 

@@ -8,4 +8,16 @@ $("#date_range").daterangepicker({
     days: 13
   }
 });
-//$("#date_from_str, #date_to_str").datepicker("setDate", new Date(Date.now()));
+
+$("#date").daterangepicker({
+  maxDate: moment.utc(),
+  drops: "up",
+  showDropdowns: true,
+  singleDatePicker: true,
+  timePicker: true,
+  timePicker24Hour: true,
+  timePickerIncrement: 30,
+  locale: {
+    format: "DD/MM/YYYY HH:mm"
+  },
+});

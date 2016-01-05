@@ -1,1 +1,3 @@
 <div id="map" class="map"></div>
+<h2>Map Form</h2>
+<%= render "form.html", conn: @conn, changeset: @changeset, types: @types %>

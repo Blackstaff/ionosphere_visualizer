@@ -23,8 +23,38 @@ defmodule IonosphereVisualizer.MapController do
   def create(conn, %{"map" => map_params}) do
     #changeset = Map.changeset(%Map{}, map_params)
     #map = changeset.changes
-    #TODO rewrite
     {:ok, datetime} = map_params["datetime"] |> parse_datetime
+    parameter_type = map_params["parameter_type"]
+
+    map = Repo.one from m in Map,
+      select: m.data,
+      where: m.datetime == ^datetime
+      and m.parameter_type == ^parameter_type
+
+    map = if is_nil(map) do
+      #TODO use Map changeset
+      create_map(datetime, map_params)
+    else
+       {:ok, map}
+    end
+
+    case map do
+      {:ok, map} ->
+        classes = (for elem <- map, do: elem["value"])
+        |> classify(7)
+
+        conn
+        |> put_status(:created)
+        |> render("map.json", %{map: map, classes: classes})
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(IonosphereVisualizer.ChangesetView, "error.json",
+          changeset: changeset)
+    end
+  end
+
+  defp create_map(datetime, map_params) do
     {:ok, time_from} = Ecto.DateTime.cast(%{datetime | hour: 0, min: 0})
     {:ok, time_to} = Ecto.DateTime.cast(%{time_from | hour: 23, min: 30})
     date = Ecto.DateTime.to_date(datetime)
@@ -62,7 +92,7 @@ defmodule IonosphereVisualizer.MapController do
     |> Enum.filter(&(&1.measured_at == datetime))
     |> Repo.preload(:station)
 
-    values = (for sample <- samples, sample.measured_at == datetime, do: sample)
+    map = (for sample <- samples, sample.measured_at == datetime, do: sample)
       ++ missing_measurements
     |> Enum.map(fn(measurement) ->
       {longitude, latitude} = measurement.station.location.coordinates
@@ -71,24 +101,15 @@ defmodule IonosphereVisualizer.MapController do
     end)
     |> MapGenerator.generate({-80, 80}, {-179, 179}, 3)
 
-    classes = (for value <- values, do: value.value)
-    |> classify(7)
+    changeset = Map.changeset(%Map{}, %{data: map, datetime: datetime,
+      parameter_type: map_params["parameter_type"]})
 
-    conn
-    |> put_status(:created)
-    |> render("map.json", %{map: values, classes: classes})
-    ############################################################################
-
-    #changeset = Map.changeset(%Map{}, map_params)
-
-    #case Repo.insert(changeset) do
-    #  {:ok, _map} ->
-    #    conn
-    #    |> put_flash(:info, "Map created successfully.")
-    #    |> redirect(to: map_path(conn, :index))
-    #  {:error, changeset} ->
-    #    render(conn, "new.html", changeset: changeset)
-    #end
+    case Repo.insert(changeset) do
+      {:ok, %Map{data: map}} ->
+        {:ok, map}
+      error ->
+        error
+    end
   end
 
   #TODO change name and/or module

@@ -11,7 +11,7 @@ defmodule IonosphereVisualizer.MapGenerator do
   defp polygonize(values, step) do
     values
     |> Enum.map(fn(%{value: value, location: location}) ->
-      %{value: value, geometry: point_to_polygon(location, step)}
+      %{"value" => value, "geometry" => point_to_polygon(location, step)}
     end)
   end
 
@@ -24,5 +24,7 @@ defmodule IonosphereVisualizer.MapGenerator do
     bottom_r = {lon + offset, lat - offset}
     bottom_l = {lon - offset, lat - offset}
     %Geo.Polygon{coordinates: [[upper_l, upper_r, bottom_r, bottom_l, upper_l]]}
+    |> Geo.JSON.encode
+    #TODO maybe create Polygon struct and get rid of geo library completely?
   end
 end

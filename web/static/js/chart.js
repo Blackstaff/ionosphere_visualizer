@@ -19,7 +19,7 @@ $("#chart-form-submit").click(function(event) {
           zoomType: "x"
         },
         title: {
-          text: `Ionospheric data (${data.parameter_type})`,
+          text: `${data.parameter_type.long_name} (${data.parameter_type.name})`,
           x: -20 //center
         },
         subtitle: {
@@ -28,7 +28,7 @@ $("#chart-form-submit").click(function(event) {
         },
         yAxis: {
           title: {
-            text: `${data.parameter_type} (${data.unit})`
+            text: `${data.parameter_type.name} (${data.parameter_type.unit})`
           },
           plotLines: [{
             value: 0,
@@ -43,11 +43,11 @@ $("#chart-form-submit").click(function(event) {
             year: "%b"
           },
           title: {
-            text: "Date"
+            text: "Date (UTC)"
           }
         },
         tooltip: {
-          valueSuffix: data.unit
+          valueSuffix: data.parameter_type.unit
         },
         legend: {
           layout: "vertical",

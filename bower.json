@@ -20,7 +20,8 @@
     "jquery": "~2.1.4",
     "highcharts": "highcharts-release#~4.1.9",
     "bootstrap-daterangepicker": "~2.1.13",
-    "ol3": "openlayers3-dist#~3.11.2"
+    "ol3": "openlayers3-dist#~3.11.2",
+    "raphael": "~2.1.4"
   },
   "overrides": {
     "highcharts": {

@@ -48,8 +48,7 @@ defmodule IonosphereVisualizer.ChartController do
     conn
     |> put_status(:created)
     |> render("chart.json", %{chart: measurements,
-      parameter_type: chart.parameter_type,
-      unit: ParameterType.get_unit(chart.parameter_type)})
+      parameter_type: ParameterType.get(chart.parameter_type)})
 
     #case Repo.insert(changeset) do
      # {:ok, measurement} ->

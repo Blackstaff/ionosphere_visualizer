@@ -16,7 +16,8 @@
   </div>
   <div class="form-group">
     <%= label f, :parameter_type, "Parameter type:" %>
-    <%= select f, :parameter_type, @types, class: "form-control" %>
+    <% types = for type <- @types, do: {"#{type.long_name} (#{type.name})", type.name} %>
+    <%= select f, :parameter_type, types, class: "form-control" %>
   </div>
   <div class="form-group">
     <%= label f, :date_range, "Date range:" %>

@@ -2,6 +2,7 @@ defmodule IonosphereVisualizer.MapController do
   use IonosphereVisualizer.Web, :controller
 
   import Map, only: [update: 4]
+  import Float, only: [ceil: 1, floor: 1]
 
   alias IonosphereVisualizer.Map
   alias IonosphereVisualizer.Station
@@ -45,7 +46,8 @@ defmodule IonosphereVisualizer.MapController do
 
         conn
         |> put_status(:created)
-        |> render("map.json", %{map: map, classes: classes})
+        |> render("map.json", %{map: map, classes: classes,
+          parameter_type: ParameterType.get(parameter_type)})
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
@@ -116,6 +118,8 @@ defmodule IonosphereVisualizer.MapController do
   def classify(values, class_count) do
     {min, max} = {Enum.min(values), Enum.max(values)}
     interval = (max - min) / class_count
+    |> round
+    {min, max} = {floor(min), ceil(max)}
     1..class_count
     |> Enum.map_reduce(min, fn(x, acc) ->
       if x == class_count do

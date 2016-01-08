@@ -25,7 +25,7 @@ var defaultStyle = new ol.style.Style({
   })
 });
 
-var valueClasses = {
+var classColors = {
   1: [254, 240, 217, 0.6],
   2: [253, 212, 158, 0.6],
   3: [253, 187, 132, 0.6],
@@ -34,6 +34,29 @@ var valueClasses = {
   6: [215, 48, 31, 0.6],
   7: [153, 0, 0, 0.6]
 };
+
+window.app = {};
+var app = window.app;
+
+app.Legend = function(opt_options) {
+  var options = opt_options || {};
+
+  var legend = document.createElement("div");
+  legend.setAttribute("id", "legend");
+
+  var element = document.createElement("div");
+  element.className = "ol-control ol-overlaycontainer-stopevent ol-legend";
+  element.appendChild(legend);
+
+  ol.control.Control.call(this, {
+    element: element,
+    target: options.target
+  });
+};
+ol.inherits(app.Legend, ol.control.Control);
+map.addControl(new app.Legend());
+
+var paper = Raphael("legend", 100, 150);
 
 $("#map-form-submit").click(function(event) {
   event.preventDefault();
@@ -46,7 +69,7 @@ $("#map-form-submit").click(function(event) {
       if (!styleCache[valueClass]) {
         styleCache[valueClass] = new ol.style.Style({
           fill: new ol.style.Fill({
-            color: valueClasses[valueClass]
+            color: classColors[valueClass]
           }),
           stroke: defaultStyle.stroke
         });
@@ -65,5 +88,29 @@ $("#map-form-submit").click(function(event) {
       map.getLayers().pop();
     }
     map.addLayer(vectorLayer);
+    paper.clear();
+    drawLegend(data.value_classes, data.parameter_type);
   });
 });
+
+function drawLegend(valueClasses, parameterType) {
+  paper.text(50, 5, `${parameterType.name} (${parameterType.unit})`).attr({
+    //"text-anchor": "start",
+    "font-size": 13,
+    "font-weight": "bold"
+  });
+  var counter = 0;
+  valueClasses.forEach(x => {
+    var color = classColors[x.class_num];
+    paper.rect(10, 15 + counter * 20, 15, 15).attr({
+      fill: Raphael.rgb(color[0], color[1], color[2]),
+      stroke: "#000099",
+      "stroke-width": 1
+    });
+    paper.text(40, 23 + counter * 20, `${x.from} - ${x.to}`).attr({
+      "text-anchor": "start",
+      "font-size": 13
+    });
+    counter += 1;
+  });
+};

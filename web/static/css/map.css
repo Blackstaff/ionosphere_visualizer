@@ -2,3 +2,8 @@
   height: 400px;
   width: 100%;
 }
+
+.ol-legend {
+	bottom: 5em;
+	right: 0.5em;
+}

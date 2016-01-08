@@ -1,6 +1,4 @@
 defmodule IonosphereVisualizer.ParameterType do
-  @units %{"foF2" => "MHz", "foE" => "MHz", "hpF" => "km", "hmF2" => "km"}
-
   defstruct name: "", long_name: "", unit: ""
 
   @types [
@@ -28,10 +26,6 @@ defmodule IonosphereVisualizer.ParameterType do
 
   def get_names do
     for type <- @types, do: type.name
-  end
-
-  def get_unit(type) do
-    @units[type]
   end
 
   def get_types do

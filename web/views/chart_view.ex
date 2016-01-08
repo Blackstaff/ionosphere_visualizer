@@ -1,9 +1,9 @@
 defmodule IonosphereVisualizer.ChartView do
   use IonosphereVisualizer.Web, :view
 
-  def render("chart.json",  %{chart: chart, parameter_type: parameter_type, unit: unit}) do
+  def render("chart.json",  %{chart: chart, parameter_type: parameter_type}) do
     %{data: render_many(chart, IonosphereVisualizer.ChartView, "data_series.json", as: :data_series),
-      parameter_type: parameter_type, unit: unit}
+      parameter_type: parameter_type}
   end
 
   def render("data_series.json", %{data_series: data_series}) do

@@ -1,5 +1,6 @@
 $("#date_range").daterangepicker({
   maxDate: new Date(Date.now()),
+  drops: "up",
   showDropdowns: true,
   locale: {
     format: "DD/MM/YYYY"

@@ -14,7 +14,8 @@ defmodule IonosphereVisualizer.ChartController do
 
   def index(conn, _params) do
     changeset = Chart.changeset(%Chart{})
-    stations = Repo.all from s in Station, where: is_nil(s.date_to)#Repo.all(Station)
+    stations = Repo.all from s in Station, where: is_nil(s.date_to),
+      order_by: s.name
     types = ParameterType.get_types
     render(conn, "index.html", changeset: changeset, stations: stations, types: types)
   end

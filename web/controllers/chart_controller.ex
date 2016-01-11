@@ -157,13 +157,11 @@ defmodule IonosphereVisualizer.ChartController do
   defp persist_measurements(data) do
     #TODO check for duplicates
     data
-    |> Enum.map(fn(elem = %{station: station, measurements: measurements}) ->
+    |> Enum.map(fn(elem) ->
       {:ok, measurements} = Repo.transaction(fn ->
-        measurements
-        |> Enum.map(fn(measurement) ->
-          measurement = Model.build(station, :measurements, measurement)
-          Repo.insert!(measurement)
-        end)
+        elem
+        |> Measurement.build
+        |> Enum.map(&Repo.insert!/1)
       end)
       %{elem | measurements: measurements}
     end)

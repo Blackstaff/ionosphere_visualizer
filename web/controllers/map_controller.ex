@@ -140,19 +140,14 @@ defmodule IonosphereVisualizer.MapController do
         hour: captures["hour"], min: captures["min"]} |> Ecto.DateTime.cast
   end
 
-  #Copied from ChartController
   defp persist_measurements(data) do
     #TODO check for duplicates
     data
-    |> Enum.map(fn(elem = %{station: station, measurements: measurements,
-      parameter_type: parameter_type}) ->
+    |> Enum.map(fn(elem) ->
       {:ok, measurements} = Repo.transaction(fn ->
-        measurements
-        |> Enum.map(fn(measurement) ->
-          measurement = Model.build(station, :measurements,
-            Dict.put_new(measurement, :parameter_type, parameter_type))
-          Repo.insert!(measurement)
-        end)
+        elem
+        |> Measurement.build
+        |> Enum.map(&Repo.insert!/1)
       end)
       %{elem | measurements: measurements}
     end)

@@ -9,11 +9,14 @@ defmodule IonosphereVisualizer.SPIDR.Client do
   @spidr_metadata_prefix "/spidr/servlet/GetMetadata?"
   @spidr_station_list_prefix "/spidr/servlet/GetMetadata?describe&"
 
+  def get_data(params, date), do: get_data(params, date, date)
+
   def get_data(params, date_from, date_to) do
+    params = format_params(params)
     param_string = to_param_string(params)
     date_from = convert_date(date_from)
     date_to = convert_date(date_to)
-    get!("#{@spidr_data_prefix}&param=#{param_string}&dateFrom=#{date_from}&dateTo=#{date_to}")
+    get!("#{@spidr_data_prefix}&param=#{param_string}&dateFrom=#{date_from}&dateTo=#{date_to}", [], [{:recv_timeout, :infinity}])
     |> process_response(:measurements)
     |> Stream.zip(params)
     |> Enum.map(fn({data, %{parameter_type: pt, station: s}}) ->
@@ -21,12 +24,20 @@ defmodule IonosphereVisualizer.SPIDR.Client do
     end)
   end
 
+  defp format_params({param_types, stations}) do
+    stations
+    |> Enum.flat_map(fn(station) ->
+      for type <- param_types, do: %{parameter_type: type, station: station}
+    end)
+  end
+  defp format_params(params), do: params
+
   defp to_param_string(params) do
     (for param <- params, do: "#{param.parameter_type}.#{param.station}")
     |> Enum.reduce(fn(param, acc) -> acc <> ";#{param}" end)
   end
 
-  defp convert_date(%Ecto.Date{year: year, month: month, day: day}),
+  defp convert_date(%{year: year, month: month, day: day}),
     do: Utils.zero_pad(year, 4) <> Utils.zero_pad(month, 2)
       <> Utils.zero_pad(day, 2)
   defp convert_date(date), do: date

@@ -27,3 +27,8 @@ import_config "#{Mix.env}.exs"
 config :phoenix, :generators,
   migration: true,
   binary_id: false
+
+# Cronjobs
+config :quantum, cron: [
+  "*/15 * * * *": &IonosphereVisualizer.QuantumJobs.Measurements.fetch/0
+]

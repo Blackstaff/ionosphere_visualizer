@@ -4,7 +4,7 @@ defmodule MUF do
   import SweetXml
 
   @spidr_wsdl_url "http://spidr.ngdc.noaa.gov/spidr/services/SpidrService?wsdl"
-  @type_name "MUF3000F2"
+  @type_name "MUF3000"
 
   def get_data(parameters, start_date, stop_date) when is_list(parameters) do
     stations = for param <- parameters, param.parameter_type == @type_name,

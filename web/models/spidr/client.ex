@@ -4,6 +4,7 @@ defmodule IonosphereVisualizer.SPIDR.Client do
 
   alias IonosphereVisualizer.SPIDR.Parser
   alias Ecto.DateTime.Utils, as: Utils
+  alias IonosphereVisualizer.SPIDR.MUF, as: MUF
 
   @spidr "http://spidr.ngdc.noaa.gov"
   @spidr_data_prefix "/spidr/servlet/GetData?format=csv"
@@ -45,7 +46,7 @@ defmodule IonosphereVisualizer.SPIDR.Client do
       [] -> false
       _ -> true
     end,
-    (for param <- params, param.parameter_type != "MUF3000F2",
+    (for param <- params, param.parameter_type != MUF.type_name,
       do: "#{param.parameter_type}.#{param.station}")
     |> Enum.reduce(fn(param, acc) -> acc <> ";#{param}" end)
   end

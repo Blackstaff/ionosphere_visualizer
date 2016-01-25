@@ -1,4 +1,4 @@
-defmodule MUF do
+defmodule IonosphereVisualizer.SPIDR.MUF do
   use HTTPoison.Base
 
   import SweetXml
@@ -57,5 +57,9 @@ defmodule MUF do
     # TODO consider using sampling rate
     |> String.replace(~r/\s9999.00/, ",9999.00")
     |> String.replace(~r/\s\s[\s]*/, ",")
+  end
+
+  def type_name do
+    @type_name
   end
 end

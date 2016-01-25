@@ -1,5 +1,6 @@
 defmodule IonosphereVisualizer.SPIDR.Client do
   use HTTPoison.Base
+  use Pipe
 
   alias IonosphereVisualizer.SPIDR.Parser
   alias Ecto.DateTime.Utils, as: Utils
@@ -16,12 +17,19 @@ defmodule IonosphereVisualizer.SPIDR.Client do
     param_string = to_param_string(params)
     date_from = convert_date(date_from)
     date_to = convert_date(date_to)
-    get!("#{@spidr_data_prefix}&param=#{param_string}&dateFrom=#{date_from}&dateTo=#{date_to}", [], [{:recv_timeout, :infinity}])
-    |> process_response(:measurements)
-    |> Stream.zip(params)
-    |> Enum.map(fn({data, %{parameter_type: pt, station: s}}) ->
-      %{parameter_type: pt, station: s, measurements: data}
-    end)
+    additional_data = MUF.get_data(params, date_from, date_to)
+    |> process_additional_data(:measurements, :muf)
+    data = case param_string do
+      [] -> []
+      param_string ->
+        get!("#{@spidr_data_prefix}&param=#{param_string}&dateFrom=#{date_from}&dateTo=#{date_to}", [], [{:recv_timeout, 30000}])
+        |> process_response(:measurements)
+        |> Stream.zip(params)
+        |> Enum.map(fn({data, %{parameter_type: pt, station: s}}) ->
+          %{parameter_type: pt, station: s, measurements: data}
+        end)
+    end
+    data ++ additional_data
   end
 
   defp format_params({param_types, stations}) do
@@ -33,7 +41,12 @@ defmodule IonosphereVisualizer.SPIDR.Client do
   defp format_params(params), do: params
 
   defp to_param_string(params) do
-    (for param <- params, do: "#{param.parameter_type}.#{param.station}")
+    pipe_while fn
+      [] -> false
+      _ -> true
+    end,
+    (for param <- params, param.parameter_type != "MUF3000F2",
+      do: "#{param.parameter_type}.#{param.station}")
     |> Enum.reduce(fn(param, acc) -> acc <> ";#{param}" end)
   end
 
@@ -56,7 +69,20 @@ defmodule IonosphereVisualizer.SPIDR.Client do
     @spidr <> url
   end
 
-  defp process_response(%{ body: body, status_code: 200 }, format) do
-    body |> Parser.parse_data(format)
+  defp process_response(%{body: body, status_code: 200}, format) do
+    body
+    |> Parser.parse_data(format)
+  end
+
+  defp process_additional_data([], _, :muf), do: []
+  defp process_additional_data(additional_data, format, :muf) do
+    additional_data
+    |> Enum.map(fn(elem) ->
+      %{station: s, parameter_type: parameter_type, data: data} = elem
+      measurements = data
+      |> Parser.parse_data(format)
+      |> Enum.flat_map(&(&1))
+      %{parameter_type: parameter_type, station: s, measurements: measurements}
+    end)
   end
 end

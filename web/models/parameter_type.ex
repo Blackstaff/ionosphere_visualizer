@@ -21,6 +21,11 @@ defmodule IonosphereVisualizer.ParameterType do
       name: "hmF2",
       long_name: "Peak height of F2 layer",
       unit: "km"
+    },
+    %{
+      name: "MUF3000",
+      long_name: "Maximum usable frequency",
+      unit: "MHz"
     }
   ]
 

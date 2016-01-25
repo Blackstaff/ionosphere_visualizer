@@ -17,8 +17,8 @@ defmodule IonosphereVisualizer.Mixfile do
   # Type `mix help compile.app` for more information
   def application do
     [mod: {IonosphereVisualizer, []},
-     applications: [:phoenix, :phoenix_html, :cowboy, :logger,
-                    :phoenix_ecto, :postgrex, :httpoison, :tzdata, :quantum]]
+     applications: [:phoenix, :phoenix_html, :cowboy, :logger, :phoenix_ecto,
+      :postgrex, :httpoison, :tzdata, :quantum]]
   end
 
   # Specifies which paths to compile per environment

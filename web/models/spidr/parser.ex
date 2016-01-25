@@ -70,6 +70,7 @@ defmodule IonosphereVisualizer.SPIDR.Parser do
     |> Stream.map(&(String.replace(&1, "/", "")))
     |> CSV.decode(headers: @data_headers, num_pipes: 1)
     |> Stream.map(&(Map.update!(&1, :value, fn(value) -> String.to_float(value) end)))
+    |> Stream.filter(&(&1.value < 1000))
     |> Enum.map(&(Map.update!(&1, :measured_at, fn(mt) -> cast_to_ecto_datetime(mt) end)))
     #OPTIMIZE consider Stream
   end

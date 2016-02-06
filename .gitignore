@@ -23,3 +23,8 @@ erl_crash.dump
 # secrets file as long as you replace its contents by environment
 # variables.
 /config/prod.secret.exs
+
+# Release artifacts
+/rel
+/config/*.conf
+/config/*.schema.exs

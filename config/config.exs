@@ -30,5 +30,5 @@ config :phoenix, :generators,
 
 # Cronjobs
 config :quantum, cron: [
-  "*/15 * * * *": &IonosphereVisualizer.QuantumJobs.Measurements.fetch/0
+  "*/15 * * * * IonosphereVisualizer.QuantumJobs.Measurements.fetch"
 ]

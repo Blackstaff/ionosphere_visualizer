@@ -60,9 +60,11 @@ var paper = Raphael("legend", 100, 150);
 
 $("#map-form-submit").click(function(event) {
   event.preventDefault();
+  $(".spinner").show();
   var url = "http://" + location.host + "/api/maps";
   var formData = $("form").serialize();
   $.post(url, formData, function(data) {
+    $(".spinner").hide();
     var styleFunction = (feature, resolution) => {
       var value = feature.get("value");
       var valueClass = data.value_classes.find(x => x.from <= value && value <= x.to).class_num;

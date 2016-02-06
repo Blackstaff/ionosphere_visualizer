@@ -1,8 +1,10 @@
 $("#chart-form-submit").click(function(event) {
   event.preventDefault();
+  $(".spinner").show();
   var formData = $("form").serialize();
   var url = "http://" + location.host + "/api/charts";
   $.post(url, formData, function(data) {
+    $(".spinner").hide();
     var series = data.data.map(function(elem) {
       var measurements = elem.measurements.map(function(measurement) {
         return [Date.parse(measurement.measured_at), measurement.value];

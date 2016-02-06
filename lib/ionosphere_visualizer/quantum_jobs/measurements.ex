@@ -8,7 +8,6 @@ defmodule IonosphereVisualizer.QuantumJobs.Measurements do
   alias IonosphereVisualizer.Station
   alias IonosphereVisualizer.ParameterType
   alias IonosphereVisualizer.SPIDR.Client
-  alias Ecto.Model
 
   def fetch do
     {:ok, date} = Date.now

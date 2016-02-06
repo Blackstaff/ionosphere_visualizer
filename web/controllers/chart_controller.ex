@@ -8,7 +8,6 @@ defmodule IonosphereVisualizer.ChartController do
   alias IonosphereVisualizer.Measurement
   alias IonosphereVisualizer.ParameterType
   alias IonosphereVisualizer.SPIDR.Client
-  alias Ecto.Model
 
   plug :scrub_params, "chart" when action in [:create]
 

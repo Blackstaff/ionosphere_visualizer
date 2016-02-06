@@ -18,8 +18,10 @@ defmodule IonosphereVisualizer.Web do
 
   def model do
     quote do
-      use Ecto.Model
-      
+      use Ecto.Schema
+
+      import Ecto
+      import Ecto.Changeset
     end
   end
 
@@ -28,7 +30,7 @@ defmodule IonosphereVisualizer.Web do
       use Phoenix.Controller
 
       alias IonosphereVisualizer.Repo
-      import Ecto.Model
+      import Ecto
       import Ecto.Query, only: [from: 1, from: 2]
 
       import IonosphereVisualizer.Router.Helpers
@@ -46,6 +48,8 @@ defmodule IonosphereVisualizer.Web do
       use Phoenix.HTML
 
       import IonosphereVisualizer.Router.Helpers
+      import IonosphereVisualizer.ErrorHelpers
+      import IonosphereVisualizer.Gettext
     end
   end
 
@@ -60,7 +64,7 @@ defmodule IonosphereVisualizer.Web do
       use Phoenix.Channel
 
       alias IonosphereVisualizer.Repo
-      import Ecto.Model
+      import Ecto
       import Ecto.Query, only: [from: 1, from: 2]
 
     end

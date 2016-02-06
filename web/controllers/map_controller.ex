@@ -11,7 +11,6 @@ defmodule IonosphereVisualizer.MapController do
   alias IonosphereVisualizer.MapGenerator
   alias IonosphereVisualizer.ParameterType
   alias IonosphereVisualizer.SPIDR.Client
-  alias Ecto.Model
 
   plug :scrub_params, "map" when action in [:create, :update]
 

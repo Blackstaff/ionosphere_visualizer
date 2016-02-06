@@ -2,7 +2,6 @@ defmodule IonosphereVisualizer.Measurement do
   use IonosphereVisualizer.Web, :model
 
   alias IonosphereVisualizer.ParameterType
-  alias Ecto.Model
 
   schema "measurements" do
     field :value, :float
@@ -26,7 +25,6 @@ defmodule IonosphereVisualizer.Measurement do
   def changeset(model, params \\ :empty) do
     model
     |> cast(params, @required_fields, @optional_fields)
-    |> Ecto.Model.Timestamps.put_timestamp(:last_accessed, Ecto.DateTime, false)
     |> validate_inclusion(:parameter_type, ParameterType.get_names)
   end
 
@@ -34,7 +32,7 @@ defmodule IonosphereVisualizer.Measurement do
     parameter_type: parameter_type}) do
     measurements
     |> Enum.map(fn(measurement) ->
-      measurement = Model.build(station, :measurements,
+      measurement = Ecto.build_assoc(station, :measurements,
         Dict.put_new(measurement, :parameter_type, parameter_type))
     end)
   end
@@ -42,7 +40,7 @@ defmodule IonosphereVisualizer.Measurement do
   def build(%{station: station, measurements: measurements}) do
     measurements
     |> Enum.map(fn(measurement) ->
-      measurement = Model.build(station, :measurements, measurement)
+      measurement = Ecto.build_assoc(station, :measurements, measurement)
     end)
   end
 

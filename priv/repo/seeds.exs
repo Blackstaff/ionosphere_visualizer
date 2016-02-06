@@ -12,8 +12,12 @@
 
 alias IonosphereVisualizer.Repo
 alias IonosphereVisualizer.Station
+alias IonosphereVisualizer.Measurement
+alias IonosphereVisualizer.Map
 alias IonosphereVisualizer.SPIDR.Client
 
+Repo.delete_all(Map)
+Repo.delete_all(Measurement)
 Repo.delete_all(Station)
 
 Client.get_station_list("iono")

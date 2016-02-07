@@ -56,7 +56,10 @@ app.Legend = function(opt_options) {
 ol.inherits(app.Legend, ol.control.Control);
 map.addControl(new app.Legend());
 
-var paper = Raphael("legend", 100, 150);
+var paper = null;
+if ($("#legend").length) {
+  paper = Raphael("legend", 100, 150);
+}
 
 $("#map-form-submit").click(function(event) {
   event.preventDefault();

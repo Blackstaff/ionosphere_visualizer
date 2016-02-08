@@ -1,5 +1,6 @@
 <div class="row">
   <div class="col-md-12">
-    <h1>Hello World!</h1>
+    <h3><%= gettext "Web application for ionosphere visualization" %></h3>
+    <p><%= gettext "The purpose of this application is to provide high quality maps and charts of selected ionosphere's parameters. The charts are available under the \"Chart\" menu position and maps are available under the \"Map\" menu position." %></p>
   </div>
 </div>

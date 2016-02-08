@@ -11,16 +11,16 @@
   <% end %>
 
   <div class="form-group">
-    <%= label f, :stations, "Stations:" %>
+    <%= label f, :stations, gettext("Stations:") %>
     <%= multiple_select f, :stations, to_code_name_tuples(@stations), class: "form-control" %>
   </div>
   <div class="form-group">
-    <%= label f, :parameter_type, "Parameter type:" %>
+    <%= label f, :parameter_type, gettext("Parameter type:") %>
     <% types = for type <- @types, do: {"#{type.long_name} (#{type.name})", type.name} %>
     <%= select f, :parameter_type, types, class: "form-control" %>
   </div>
   <div class="form-group">
-    <%= label f, :date_range, "Date range:" %>
+    <%= label f, :date_range, gettext("Date range:") %>
     <div class="input-group date">
       <input type="text" id="date_range" class="form-control" name="chart[date_range]">
       <span class="input-group-addon">
@@ -29,6 +29,6 @@
     </div>
   </div>
   <div class="form-group">
-    <%= submit "Submit", class: "btn btn-primary", id: "chart-form-submit" %>
+    <%= submit gettext("Submit"), class: "btn btn-primary", id: "chart-form-submit" %>
   </div>
 <% end %>

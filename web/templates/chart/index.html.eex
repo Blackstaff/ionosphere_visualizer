@@ -1,4 +1,4 @@
 <div id="chart"></div>
-<h2>Chart Form</h2>
+<h2><% gettext "Chart Form" %></h2>
 <%= render "form.html", conn: @conn, changeset: @changeset,
   stations: @stations, types: @types %>

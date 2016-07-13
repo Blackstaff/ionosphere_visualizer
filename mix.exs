@@ -18,7 +18,7 @@ defmodule IonosphereVisualizer.Mixfile do
   def application do
     [mod: {IonosphereVisualizer, []},
      applications: [:phoenix, :phoenix_html, :cowboy, :logger, :phoenix_ecto,
-      :postgrex, :httpoison, :tzdata, :quantum, :timex, :floki, :gettext]]
+      :postgrex, :httpoison, :tzdata, :quantum, :timex, :floki, :gettext, :geo]]
   end
 
   # Specifies which paths to compile per environment

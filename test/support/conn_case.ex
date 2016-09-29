@@ -32,10 +32,12 @@ defmodule IonosphereVisualizer.ConnCase do
   end
 
   setup tags do
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(IonosphereVisualizer.Repo)
+
     unless tags[:async] do
-      Ecto.Adapters.SQL.restart_test_transaction(IonosphereVisualizer.Repo, [])
+      Ecto.Adapters.SQL.Sandbox.mode(IonosphereVisualizer.Repo, {:shared, self()})
     end
 
-    :ok
+    {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 end

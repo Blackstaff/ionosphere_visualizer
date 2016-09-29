@@ -8,7 +8,6 @@ use Mix.Config
 # Configures the endpoint
 config :ionosphere_visualizer, IonosphereVisualizer.Endpoint,
   url: [host: "localhost"],
-  root: Path.dirname(__DIR__),
   secret_key_base: "9vPw36v4sDBSUL2GOY9s5j4YY0p+UMlwOWdOrw1Cod6viNnCMm1HPTc/YstiYB0J",
   render_errors: [accepts: ~w(html json)],
   pubsub: [name: IonosphereVisualizer.PubSub,
@@ -32,3 +31,5 @@ config :phoenix, :generators,
 config :quantum, cron: [
   "*/15 * * * * IonosphereVisualizer.QuantumJobs.Measurements.fetch"
 ]
+
+config :ionosphere_visualizer, ecto_repos: [IonosphereVisualizer.Repo]
